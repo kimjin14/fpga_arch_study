@@ -1,4 +1,4 @@
-module popcount(in1,in2,out);
+module popcount5(in1,in2,out);
 
 parameter I_WIDTH = 5;
 parameter O_WIDTH = 3;
