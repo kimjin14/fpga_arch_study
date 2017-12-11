@@ -35,7 +35,7 @@ while (<>) {
 	  }
 	else {
 	  $ARGV =~ m/([\w\d\-]+)\.\S/;
-	  $outf = "temp/" . $1 . ".cnf";
+	  $outf = $1 . ".cnf";
 	  open(FOUT, ">$outf");
 	  select(FOUT);
 	}

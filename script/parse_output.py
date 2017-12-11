@@ -52,21 +52,22 @@ def parse_minisat_output(config_list, sat_assignment_file):
   for config_type in config_list:
     print config_type
     if config_type == "lut":
+      print "TEST\n"
       for config_per_lut in config_list[config_type]:
         for config_per_lut_per_output in config_per_lut:
           for lit in config_per_lut_per_output:
             print str(sat_assignment_dict[lit]),
           print "\n"
         print "\n"
-#    elif config_type == "ixbar":
-#      for i in range(28):
-#        temp = 0
-#        bit = 0
-#        for j in range(5):
-#          bit = sat_assignment_dict[config_list[config_type][i*5 + j]]
-#          temp = (bit << j) | temp;
-#        print temp+1,
-#      print "\n"
+    elif config_type == "ixbar":
+      for i in range(28):
+        temp = 0
+        bit = 0
+        for j in range(5):
+          bit = sat_assignment_dict[config_list[config_type][i*5 + j]]
+          temp = (bit << j) | temp;
+        print temp,
+      print "\n"
           
  #       for i in range(N_INPUT_MUX):
  # temp = 0

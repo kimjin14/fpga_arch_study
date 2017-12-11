@@ -83,6 +83,7 @@ if not os.path.isfile(BLIF2CNF_PATH):
 p = sub.call([BLIF2CNF_PATH, \
   "-m " + TFILE_PATH + CIRCUIT + ".fname", \
   TFILE_PATH + CIRCUIT + ".blif"])
+os.rename(CIRCUIT + ".cnf", TFILE_PATH + CIRCUIT + ".cnf")
 
 RUNSAT = 1
 if RUNSAT == 1:
@@ -90,18 +91,16 @@ if RUNSAT == 1:
   #########################
   # Run convert cnf 
   #########################
-  added_clause_list, added_int_te, added_int_list = \
-    cnfgen.convert_cnf(in_var, out_var, curr_var, TFILE_PATH + CIRCUIT)
-  clause_list.extend(added_clause_list)
-  int_te = int_te + added_int_te
-  int_list.extend(added_int_list)
+  #print "CONVERTING BLIF CNF TO CNF\n"
+  #added_clause_list, added_int_te, added_int_list = \
+  #  cnfgen.convert_cnf(in_var, out_var, curr_var, TFILE_PATH + CIRCUIT)
+  #clause_list.extend(added_clause_list)
+  #int_te = int_te + added_int_te
+  #int_list.extend(added_int_list)
      
   #########################
   # Expand to SAT 
   #########################
-  #print clause_list
-  #print config_list 
-  #print int_list 
   print "EXPAND TO SAT\n"
   expandSAT.convert_to_SAT(in_list, int_list, clause_list, OUTPUT_SAT_CNF_NAME)
 
@@ -115,7 +114,7 @@ if RUNSAT == 1:
   # Parse Solver Output
   #########################
   #print "PARSE OUTPUT\n"
-  #parseout.parse_minisat_output(config_list, "output_sat.log")
+  #parseout.parse_minisat_output(config_list, TFILE_PATH + "output_256.log")
   
   sys.exit(0)
 

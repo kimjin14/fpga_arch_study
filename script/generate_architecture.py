@@ -109,7 +109,7 @@ def print_xilinx():
   output_mux = []
 
   config_list = {}
-  config_list["uinput"] = [[[] for x in xrange(lut_output_size)] for x in xrange(num_of_xlut)]
+  config_list["uinput"] = []
   config_list["lut"] = [[[] for x in xrange(lut_output_size)] for x in xrange(num_of_xlut)]
   config_list["lut6"] = []
   config_list["ixbar"] = []
@@ -139,14 +139,14 @@ def print_xilinx():
       for j in range (input_sel_size):
         select_temp.append(currvar + einput_size*2 + input_size*input_sel_size*a + \
           input_sel_size*i + j)
-      if i < 6:
-        clause_list.extend(print_mux_list(einput_size - i%5 + 1, input_sel_size, 
-          [currvar + einput_size*(2 + input_sel_size) + input_size*a + i] + input_external, \
-          select_temp, input_internal[a][i]))
-      else:
-        clause_list.extend(print_mux_list(einput_size + 1, input_sel_size, \
-          [currvar + einput_size*(2 + input_sel_size) + input_size*a + i] + input_external, \
-          select_temp, input_internal[a][i]))
+      #if i < 6:
+      #  clause_list.extend(print_mux_list(einput_size - i%5 + 1, input_sel_size, 
+      #    [currvar + einput_size*(2 + input_sel_size) + input_size*a + i] + input_external, \
+      #    select_temp, input_internal[a][i]))
+      #else:
+      clause_list.extend(print_mux_list(einput_size + 1, input_sel_size, \
+        [currvar + einput_size*(2 + input_sel_size) + input_size*a + i] + input_external, \
+        select_temp, input_internal[a][i]))
       config_list["ixbar"].extend(select_temp)
       config_list["uinput"].append(currvar + einput_size*(2 + input_sel_size) + input_size*a + i)
   
