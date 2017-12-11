@@ -85,19 +85,18 @@ p = sub.call([BLIF2CNF_PATH, \
   TFILE_PATH + CIRCUIT + ".blif"])
 os.rename(CIRCUIT + ".cnf", TFILE_PATH + CIRCUIT + ".cnf")
 
-RUNSAT = 1
+#########################
+# Run convert cnf 
+#########################
+print "CONVERTING BLIF CNF TO CNF\n"
+added_clause_list, added_int_te, added_int_list = \
+  cnfgen.convert_cnf(in_var, out_var, curr_var, TFILE_PATH + CIRCUIT)
+clause_list.extend(added_clause_list)
+int_te = int_te + added_int_te
+int_list.extend(added_int_list)
+   
+RUNSAT = 0
 if RUNSAT == 1:
-
-  #########################
-  # Run convert cnf 
-  #########################
-  #print "CONVERTING BLIF CNF TO CNF\n"
-  #added_clause_list, added_int_te, added_int_list = \
-  #  cnfgen.convert_cnf(in_var, out_var, curr_var, TFILE_PATH + CIRCUIT)
-  #clause_list.extend(added_clause_list)
-  #int_te = int_te + added_int_te
-  #int_list.extend(added_int_list)
-     
   #########################
   # Expand to SAT 
   #########################
@@ -116,38 +115,26 @@ if RUNSAT == 1:
   #print "PARSE OUTPUT\n"
   #parseout.parse_minisat_output(config_list, TFILE_PATH + "output_256.log")
   
-  sys.exit(0)
-
-#########################
-# Run convert cnf 
-#########################
-added_clause_list, added_int_te, added_int_list = \
-  cnfgen.convert_cnf(in_var, out_var, curr_var, CIRCUIT)
-clause_list.extend(added_clause_list)
-int_te = int_te + added_int_te
-
-#########################
-# Combine 
-#########################
-literal = int_te.split()
-last_literal = literal[len(literal)-1]
-
-with open (OUTPUT_CNF_NAME, "w+") as ocnf: 
-  ocnf.write("p " + last_literal + " " + str(len(clause_list)) + "\n")
-  ocnf.write(config_te + " 0\n")
-  ocnf.write(fa + " 0\n")
-  ocnf.write(int_te + " 0\n")
-  for clause in clause_list:
-    ocnf.write(clause + "\n")
-
-#########################
-# Run QBF Solver
-#########################
-f = open("output.log", "w")
-p = sub.call([QBF_PATH, OUTPUT_CNF_NAME], stdout=f)
-print "\n*QBF Solver: " + QBF_PATH + " " + OUTPUT_CNF_NAME
-
-#########################
-# Parse Solver Output
-#########################
-parseout.parse_rareqs_output(config_list, "output.log")
+else :
+  #########################
+  # Combine 
+  #########################
+  with open (OUTPUT_CNF_NAME, "w+") as ocnf: 
+    ocnf.write("p " + str(int_list[len(int_list)-1]) + " " + str(len(clause_list)) + "\n")
+    ocnf.write(config_te + " 0\n")
+    ocnf.write(fa + " 0\n")
+    ocnf.write(int_te + " 0\n")
+    for clause in clause_list:
+      ocnf.write(clause + "\n")
+  
+  #########################
+  # Run QBF Solver
+  #########################
+  f = open("output.log", "w")
+  p = sub.call([QBF_PATH, OUTPUT_CNF_NAME], stdout=f)
+  print "\n*QBF Solver: " + QBF_PATH + " " + OUTPUT_CNF_NAME
+  
+  #########################
+  # Parse Solver Output
+  #########################
+  parseout.parse_rareqs_output(config_list, "output.log")
